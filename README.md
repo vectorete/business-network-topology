@@ -37,6 +37,7 @@ A packet tracer project that represents a secure network topology design for a m
   <ol>
     <li>
       <a href="#about-the-project">🔎 About The Project</a>
+      <a href="#business-overview"> 📊 Business Overview</a>
       <ul>
         <li><a href="#features">✨ Features</a></li>
         <li><a href="#built-with">🔨 Built With</a></li>
@@ -75,7 +76,31 @@ A packet tracer project that represents a secure network topology design for a m
     <img src="images/topology.png" alt="Logo" width="100%">
   </a>
 
-The Network Topology Project for the IT Consulting Business is designed to create a secure and efficient network infrastructure for a medium-small business. This setup ensures seamless communication across departments, secure data management, and efficient operation.
+The Network Topology Project for the fictional IT Consulting Business is designed to create a secure and efficient network infrastructure for a medium-small business. This setup ensures seamless communication across departments, secure data management, and efficient operation.
+
+### 📊 Business Overview <a id="business-overview"></a>
+
+#### **Industry**: IT Consulting
+
+#### **Number of Employees**: 50
+
+#### **Location**: Single office building with three floors
+
+**Departments and Their Layout**:
+
+- **Top Floor**:
+  - **Executive (5 employees)**: Senior management and leadership team.
+  - **Finance (10 employees)**: Handles budgeting, accounting, and financial reporting.
+  - **HR (5 employees)**: Manages recruitment, employee relations, and benefits.
+
+- **Middle Floor**:
+  - **IT (10 employees)**: Responsible for network maintenance, technical support, and IT infrastructure.
+  - **Sales (10 employees)**: Manages client relationships, sales strategies, and business development.
+
+- **Ground Floor**:
+  - **Customer Support (10 employees)**: Provides assistance to clients, handles inquiries, and manages support tickets.
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ### ✨ Features <a id="features"></a>
 
@@ -129,13 +154,26 @@ The internal firewall provides an additional layer of security, controlling traf
 #### 5. **Layer 3 Switch**
 The Layer 3 switch handles inter-VLAN routing, facilitating communication between different departments while maintaining security boundaries. Access control lists (ACLs) enforce security policies across the network, allowing for efficient operations without compromising security.
 
-### Conclusion
+<hr>
+
+**Conclusion**
+
 This network topology design employs a defense-in-depth strategy, with multiple layers of security protecting the organization's critical systems. By placing servers in a DMZ and using VLAN segmentation alongside external and internal firewalls, the design ensures that the internal network remains secure, even in the event of a server compromise. This setup is essential for maintaining the integrity and availability of the business's operations.
+
+<hr>
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ### 📁 Configuration Note <a id="config-note"></a>
-There is a configuration file included in the project repository that details the entire network setup. Please note that the Packet Tracer file provided does not fully replicate this configuration. Specifically, the Cisco ASA firewall in Packet Tracer does not support dividing the interface connected to the DMZ switch into subinterfaces as real hardware does. The configuration file outlines the complete setup, including the subinterface configurations not represented in Packet Tracer.
+
+There is a configuration file included in the project repository named `topology.txt` that details the entire network setup. This file provides a comprehensive view of the network configuration, including specific settings for devices and interfaces.
+
+**Important Note**:
+- The Cisco Packet Tracer file included in this repository does not fully replicate the configuration outlined in `topology.txt`. This limitation is due to Packet Tracer's inability to support certain advanced features, such as dividing the interface connected to the DMZ switch into subinterfaces.
+- The `topology.txt` file contains the complete setup, including these advanced configurations that are not represented in Packet Tracer. For a full understanding of the network configuration, please refer to this file.
+
+To access the configuration file, download it from the repository:
+- [topology.txt](business-network-topology/topology.txt)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
