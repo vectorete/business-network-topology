@@ -306,7 +306,7 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 <!-- CONTACT -->
 ## ☎️ Contact <a id="contact"></a>
 
-Victor Kravchuk Vorkevych - victorkravchu19@gmail.com
+Victor Kravchuk Vorkevych - victorkravchuk19@gmail.com
 
 Project Link: [https://github.com/vectorete/business-network-topology](https://github.com/vectorete/business-network-topology)
 
