@@ -169,11 +169,11 @@ This network topology design employs a defense-in-depth strategy, with multiple 
 There is a configuration file included in the project repository named `topology.txt` that details the entire network setup. This file provides a comprehensive view of the network configuration, including specific settings for devices and interfaces.
 
 **Important Note**:
-- The Cisco Packet Tracer file included in this repository does not fully replicate the configuration outlined in `topology.txt`. This limitation is due to Packet Tracer's inability to support certain advanced features, such as dividing the interface connected to the DMZ switch into subinterfaces.
+- The Cisco Packet Tracer file included in this repository does not fully replicate the configuration outlined in `topology.txt`. This limitation is due to Packet Tracer's inability to support certain advanced features, such as dividing the interface in the Cisco Firewall ASA connected to the DMZ switch into subinterfaces.
 - The `topology.txt` file contains the complete setup, including these advanced configurations that are not represented in Packet Tracer. For a full understanding of the network configuration, please refer to this file.
 
 To access the configuration file, download it from the repository:
-- [topology.txt](business-network-topology/topology.txt)
+- [topology.txt](topology.txt)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -266,7 +266,7 @@ Here are some additional resources that you may find useful:
 - **[OWASP (Open Web Application Security Project)](https://owasp.org)**: Comprehensive resources on web application security.
 - **[NIST Cybersecurity Framework](https://www.nist.gov/cyberframework)**: Guidelines and best practices for improving cybersecurity.
 
-### 🤝 Community and Support
+### 🆘 Community and Support
 - **[Cisco Community](https://community.cisco.com)**: A forum for discussing Cisco products and networking topics.
 - **[Reddit r/networking](https://www.reddit.com/r/networking)**: A subreddit for network-related discussions and questions.
 - **[Stack Overflow](https://stackoverflow.com/questions/tagged/networking)**: Q&A site for programming and network-related queries.
