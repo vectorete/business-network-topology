@@ -98,9 +98,11 @@ The Network Topology Project for the IT Consulting Business is designed to creat
 ### 🖧 Network Topology <a id="network-topology"></a>
 
 The network topology is designed with a layered security approach, ensuring that critical systems are protected from external and internal threats.
+
 **Network Topology**:
+
   <a href="https://github.com/vectorete/business-network-topology">
-    <img src="images/topology.png" alt="Logo" width="50%">
+    <img src="images/topology.png" alt="Logo" width="100%">
   </a>
 
 #### 1. **External Firewall**
@@ -113,7 +115,7 @@ The network is divided into several VLANs to enhance security and performance by
   - **VLAN10:** Dedicated to DNS servers.
   - **VLAN20:** Hosts Web, Mail, and FTP servers, all protected by a Web Application Firewall (WAF).
   - **VLAN30:** Reserved for the honeypot server, which acts as a decoy for potential attackers.
-  - **VLAN50:** Contains the Network Intrusion Detection System (NIDS) and monitoring PC for logs.
+  - **VLAN40:** Contains the Network Intrusion Detection System (NIDS) and monitoring PC for logs.
 
 - **Internal Network VLANs:**
   - **VLAN10:** HR Department.
