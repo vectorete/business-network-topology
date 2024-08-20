@@ -71,11 +71,9 @@ A packet tracer project that represents a secure network topology design for a m
 <!-- ABOUT THE PROJECT -->
 ## 🔎 About The Project <a id="about-the-project"></a>
 
-<div align="center">
   <a href="https://github.com/vectorete/business-network-topology">
-    <img src="images/projectimg.png" alt="Project" width="50%">
+    <img src="images/topology.png" alt="Logo" width="100%">
   </a>
-</div>
 
 The Network Topology Project for the IT Consulting Business is designed to create a secure and efficient network infrastructure for a medium-small business. This setup ensures seamless communication across departments, secure data management, and efficient operation.
 
@@ -100,10 +98,6 @@ The Network Topology Project for the IT Consulting Business is designed to creat
 The network topology is designed with a layered security approach, ensuring that critical systems are protected from external and internal threats.
 
 **Network Topology**:
-
-  <a href="https://github.com/vectorete/business-network-topology">
-    <img src="images/topology.png" alt="Logo" width="100%">
-  </a>
 
 #### 1. **External Firewall**
 The external firewall serves as the first line of defense, filtering traffic between the internet and the internal network. It blocks unauthorized access and protects against various threats, including DDoS attacks and malware, ensuring a secure perimeter.
