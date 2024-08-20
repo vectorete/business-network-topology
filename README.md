@@ -36,7 +36,7 @@ A packet tracer project that represents a secure network topology design for a m
   <summary>Table of Contents</summary>
   <ol>
     <li>
-      <a href="#about-the-project">🔎 About The Project</a>
+      <a href="#about-the-project">🔎 About The Project</a> ||
       <a href="#business-overview"> 📊 Business Overview</a>
       <ul>
         <li><a href="#features">✨ Features</a></li>
@@ -62,6 +62,7 @@ A packet tracer project that represents a secure network topology design for a m
         <li><a href="#monitoring-maintenance">🧪 Monitoring and Maintenance</a></li>
       </ul>
     </li>
+    <li><a href="#possible-improvements">🔧 Possible Improvements</a></li>
     <li><a href="#resources">📚 Resources</a></li>
     <li><a href="#contributing">🤝 Contributing</a></li>
     <li><a href="#license">©️ License</a></li>
@@ -243,6 +244,13 @@ That's it! The network topology will load in Packet Tracer, and you can start ex
 - **Honeypot Analysis**: Analyze data captured by the honeypot to learn from the attackers and see what are their pattern of attacks.
 
 - **Log Management**: Use monitoring PCs to review and archive logs from various network components.
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+<!-- IMPROVEMENTS -->
+## 🔧 Possible Improvements <a id="possible-improvements"></a>
+
+In the current Packet Tracer project, VPN configuration and RADIUS server setup are not yet completed. Implementing a VPN will provide secure remote access and encrypted communication, while configuring the RADIUS server will enhance centralized authentication and access control within the internal network.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
