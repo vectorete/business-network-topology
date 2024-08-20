@@ -1,0 +1,573 @@
+internet - external firewall - router - dmz firewall - (vlan10(dns), vlan20(web/with waf, mail, ftp),vlan30(honeypot), vlan40(nids)) - internal firewall - layer 3 switch - (vlan10(hr dept), vlan 20(finance), vlan 30(it dept), vlan 40(sales dept), vlan 50(monitoring pc for logs))
+
+Internet Router
+---------------------
+Router>enable
+Router#configure terminal
+Enter configuration commands, one per line.  End with CNTL/Z.
+Router(config)#hostname Internet
+Internet(config)#interface g0/0
+Internet(config-if)#no shutdown
+Internet(config-if)#ip address 222.0.112.1 255.255.255.252
+Internet(config-if)#exit
+Internet(config)#ip route 0.0.0.0 0.0.0.0 222.0.112.2
+Internet(config)#write memory
+
+External Firewall
+---------------------
+ciscoasa>enable
+Password: 
+ciscoasa#configure terminal
+ciscoasa(config)#hostname EXTFW
+EXTFW(config)#interface g1/1
+EXTFW(config-if)#no shutdown
+EXTFW(config-if)#nameif OUTSIDE
+EXTFW(config-if)#ip address 222.0.112.2 255.255.255.252
+EXTFW(config-if)#exit
+EXTFW(config)#interface g1/2
+EXTFW(config-if)#no shutdown
+EXTFW(config-if)#ip address 172.168.0.2 255.255.255.252
+EXTFW(config-if)#nameif INSIDE
+EXTFW(config-if)#security-level 100
+EXTFW(config-if)#exit
+EXTFW(config)#route INSIDE 192.168.0.0 255.255.255.252 172.168.0.1
+EXTFW(config)#route INSIDE 10.10.0.0 255.255.255.252 172.168.0.1
+EXTFW(config)#route INSIDE 10.10.1.0 255.255.255.240 172.168.0.1
+EXTFW(config)#route INSIDE 10.10.10.0 255.255.255.252 172.168.0.1
+EXTFW(config)#route INSIDE 192.168.1.0 255.255.255.0 172.168.0.1
+EXTFW(config)#route OUTSIDE 0.0.0.0 0.0.0.0 222.0.112.1
+EXTFW(config)#object network TRANSLATED-IP
+EXTFW(config-network-object)#host 222.0.112.3
+EXTFW(config-network-object)#nat (INSIDE,OUTSIDE) dynamic interface
+EXTFW(config)#access-list OUTSIDE-TO-INSIDE extended permit tcp any host 222.0.112.3 eq www
+EXTFW(config)#access-group OUTSIDE-TO-INSIDE in interface OUTSIDE
+EXTFW(config)#access-list OUTSIDE-TO-INSIDE extended permit udp any host 222.0.112.4 eq domain
+EXTFW(config)#access-group OUTSIDE-TO-INSIDE in interface OUTSIDE
+EXTFW(config)#write memory
+
+Business Router
+--------------------
+Router>enable
+Router#configure terminal
+Router(config)#hostname Business
+Business(config)#int g0/0
+Business(config-if)#no shutdown
+Business(config-if)#ip address 172.168.0.1 255.255.255.252
+Business(config-if)#exit
+Business(config)#int g0/1
+Business(config-if)#no shutdown
+Business(config-if)#ip address 10.10.0.1 255.255.255.252
+Business(config-if)#exit
+Business(config)# ip route 192.168.0.0 255.255.255.252 10.10.0.2
+Business(config)# ip route 10.10.1.0 255.255.255.240 10.10.0.2
+Business(config)# ip route 10.10.10.0 255.255.255.252 10.10.0.2
+Business(config)# ip route 192.168.1.0 255.255.255.0 10.10.0.2
+Business(config)# ip route 0.0.0.0 0.0.0.0 172.168.0.2
+Business(config)#write memory
+
+DMZ Firewall
+---------------------
+ciscoasa>enable
+Password: 
+ciscoasa#configure terminal
+ciscoasa(config)#hostname DMZFW
+DMZFW(config)#interface g1/1
+DMZFW(config-if)#no shutdown
+DMZFW(config-if)#nameif OUTSIDE
+DMZFW(config-if)#ip address 10.10.0.2 255.255.255.252
+DMZFW(config-if)#exit
+DMZFW(config)#interface g1/2
+DMZFW(config-if)#no shutdown
+DMZFW(config-if)#exit
+DMZFW(config-if)#interface g1/2.10
+DMZFW(config-if)#nameif VLAN10
+DMZFW(config-if)#security-level 50
+DMZFW(config-if)#encapsulation dot1Q 10
+DMZFW(config-if)#ip address 10.10.1.1 255.255.255.252
+DMZFW(config-if)#interface g1/2.20
+DMZFW(config-if)#nameif VLAN20
+DMZFW(config-if)#security-level 50
+DMZFW(config-if)#encapsulation dot1Q 20
+DMZFW(config-if)#ip address 10.10.2.1 255.255.255.248
+DMZFW(config-if)#interface g1/2.30
+DMZFW(config-if)#nameif VLAN30
+DMZFW(config-if)#security-level 70
+DMZFW(config-if)#encapsulation dot1Q 30
+DMZFW(config-if)#ip address 10.10.3.1 255.255.255.252
+DMZFW(config-if)#interface g1/2.40
+DMZFW(config-if)#nameif VLAN40
+DMZFW(config-if)#security-level 0
+DMZFW(config-if)#encapsulation dot1Q 40
+DMZFW(config-if)#ip address 10.10.4.1 255.255.255.252
+DMZFW(config)#interface g1/3
+DMZFW(config-if)#no shutdown
+DMZFW(config-if)#nameif INSIDE
+DMZFW(config-if)#security-level 100
+DMZFW(config-if)#ip address 10.10.10.1 255.255.255.252
+DMZFW(config-if)#exit
+DMZFW(config)#access-list INSIDE-TO-ANY permit ip any any
+DMZFW(config)#access-group INSIDE-TO-ANY in interface INSIDE
+DMZFW(config)#access-list DMZ-TO-INSIDE permit ip any any
+DMZFW(config)#access-group DMZ-TO-INSIDE in interface DMZ
+DMZFW(config)#access-list OUTSIDE-TO-DMZ extended permit ip any host 10.10.1.2
+DMZFW(config)#access-list OUTSIDE-TO-DMZ extended permit ip any host 10.10.1.3
+DMZFW(config)#access-group OUTSIDE-TO-DMZ in interface OUTSIDE
+DMZFW(config)#route INSIDE 192.168.0.0 255.255.255.252 10.10.10.2
+DMZFW(config)#route INSIDE 192.168.1.0 255.255.255.0 10.10.10.2
+DMZFW(config)#route OUTSIDE 0.0.0.0 0.0.0.0 10.10.0.1
+DMZFW(config)#write memory
+
+Internal Firewall
+---------------------
+ciscoasa>enable
+Password: 
+ciscoasa#configure terminal
+ciscoasa(config)#hostname INTFW
+INTFW(config)#interface g1/1
+INTFW(config-if)#no shutdown
+INTFW(config-if)#nameif DMZ
+INTFW(config-if)#security-level 50
+INTFW(config-if)#ip address 10.10.10.2 255.255.255.252
+INTFW(config-if)#exit
+INTFW(config)#interface g1/2
+INTFW(config-if)#no shutdown
+INTFW(config-if)#nameif INSIDE
+INTFW(config-if)#security-level 100
+INTFW(config-if)#ip address 192.168.0.1 255.255.255.192
+INTFW(config-if)#exit
+INTFW(config)#route INSIDE 192.168.1.0 255.255.255.0 192.168.0.2
+INTFW(config)#route DMZ 0.0.0.0 0.0.0.0 10.10.10.1
+INTFW(config)#access-list DMZ-TO-INSIDE extended permit ip 10.10.1.0 255.255.255.240 any
+INTFW(config)#access-group DMZ-TO-INSIDE in interface DMZ
+INTFW(config)#write memory
+
+-----------------------------------------------------------------
+
+DMZ Switch
+---------------------
+Switch>enable
+Switch#configure terminal
+Switch(config)#hostname DMZSW
+DMZSW(config)#vlan 10
+DMZSW(config-vlan)#name DNS
+DMZSW(config-vlan)#exit
+DMZSW(config)#vlan 20
+DMZSW(config-vlan)#name WebMailFTP
+DMZSW(config-vlan)#exit
+DMZSW(config)#vlan 30
+DMZSW(config-vlan)#name NIDS
+DMZSW(config-vlan)#exit
+DMZSW(config)#vlan 40
+DMZSW(config-vlan)#name Honeypot
+DMZSW(config-vlan)#exit
+DMZSW(config)#interface g0/1
+DMZSW(config-if)#switchport trunk allowed vlan 10,20,30,40,100
+DMZSW(config-if)#switchport mode trunk
+DMZSW(config-if)#exit
+DMZSW(config)#interface f0/1
+DMZSW(config-if)#switchport mode access
+DMZSW(config-if)#switchport access vlan 10
+DMZSW(config-if)#exit
+DMZSW(config)#interface range f0/2-4
+DMZSW(config-if-range)#switchport mode access
+DMZSW(config-if-range)#switchport access vlan 20
+DMZSW(config-if-range)#exit
+DMZSW(config)#interface f0/5
+DMZSW(config-if)#switchport mode access
+DMZSW(config-if)#switchport access vlan 30
+DMZSW(config-if)#exit
+DMZSW(config)#interface f0/6
+DMZSW(config-if)#switchport mode access
+DMZSW(config-if)#switchport access vlan 40
+DMZSW(config-if)#exit
+DMZSW(config)#interface range f0/7-24, g0/2
+DMZSW(config-if-range)#shutdown
+DMZSW(config-if-range)#exit
+DMZSW(config)#monitor session 1 source vlan 10
+DMZSW(config)#monitor session 1 source vlan 20
+DMZSW(config)#monitor session 1 source vlan 40
+DMZSW(config)#monitor session 1 destination interface f0/5
+DMZSW(config)#write memory
+
+Internal Switch (Multilayer L3)
+---------------------
+Switch>enable
+Switch#configure terminal
+Switch(config)#hostname INTLSW
+INTLSW(config)#vlan 10
+INTLSW(config-vlan)#name HR
+INTLSW(config-vlan)#exit
+INTLSW(config)#vlan 20
+INTLSW(config-vlan)#name Finance
+INTLSW(config-vlan)#exit
+INTLSW(config)#vlan 30
+INTLSW(config-vlan)#name Executive
+INTLSW(config-vlan)#exit
+INTLSW(config)#vlan 40
+INTLSW(config-vlan)#name IT
+INTLSW(config-vlan)#exit
+INTLSW(config)#vlan 50
+INTLSW(config-vlan)#name Sales
+INTLSW(config-vlan)#exit
+INTLSW(config)#vlan 60
+INTLSW(config-vlan)#name CustomerSupport
+INTLSW(config-vlan)#exit
+INTLSW(config)#vlan 99
+INTLSW(config-vlan)#name DirectoryServer
+INTLSW(config-vlan)#exit
+INTLSW(config)#interface range g1/0/2-7
+INTLSW(config-if)#switchport mode trunk
+INTLSW(config-if)#exit
+INTLSW(config)#interface g1/0/8
+INTLSW(config-if)#switchport mode access
+INTLSW(config-if)#switchport access vlan 99
+INTLSW(config-if)#exit
+INTLSW(config)#interface vlan 20
+INTLSW(config-if)#ip address 192.168.1.1 255.255.255.240
+INTLSW(config-if)#no shutdown
+INTLSW(config-if)#exit
+INTLSW(config)#interface vlan 40
+INTLSW(config-if)#ip address 192.168.1.17 255.255.255.240
+INTLSW(config-if)#no shutdown
+INTLSW(config-if)#exit
+INTLSW(config)#interface vlan 50
+INTLSW(config-if)#ip address 192.168.1.33 255.255.255.240
+INTLSW(config-if)#no shutdown
+INTLSW(config-if)#exit
+INTLSW(config)#interface vlan 60
+INTLSW(config-if)#ip address 192.168.1.49 255.255.255.240
+INTLSW(config-if)#no shutdown
+INTLSW(config-if)#exit
+INTLSW(config)#interface vlan 10
+INTLSW(config-if)#ip address 192.168.1.65 255.255.255.248
+INTLSW(config-if)#no shutdown
+INTLSW(config-if)#exit
+INTLSW(config)#interface vlan 30
+INTLSW(config-if)#ip address 192.168.1.73 255.255.255.248
+INTLSW(config-if)#no shutdown
+INTLSW(config-if)#exit
+INTLSW(config)#interface vlan 99
+INTLSW(config-if)#ip address 192.168.1.81 255.255.255.252
+INTLSW(config-if)#no shutdown
+INTLSW(config-if)#exit
+INTLSW(config)#interface g1/0/1
+INTLSW(config-if)#no switchport
+INTLSW(config-if)#ip address 192.168.0.2 255.255.255.192
+INTLSW(config-if)#exit
+INTLSW(config)#interface range g1/0/9-24, g1/1/1-4
+INTLSW(config-if-range)#shutdown
+INTLSW(config-if-range)#exit
+INTLSW(config)#ip route 0.0.0.0 0.0.0.0 192.168.0.1
+INTLSW(config)#ip default-gateway 192.168.0.1
+INTLSW(config)#write memory
+
+HR Switch (VLAN 10)
+---------------------
+Switch>enable
+Switch#configure terminal
+Switch(config)#hostname HRSWITCH
+HRSWITCH(config)#interface g0/1
+HRSWITCH(config-if)#switchport mode trunk
+HRSWITCH(config)#interface range f0/1-2
+HRSWITCH(config-if)#switchport mode access
+HRSWITCH(config-if)#switchport access vlan 10
+HRSWITCH(config)#interface range f0/3-24, g0/2
+HRSWITCH(config-if-range)#shutdown
+HRSWITCH(config-if-range)#exit
+HRSWITCH#write memory
+
+Finance Switch (VLAN 20)
+---------------------
+Switch>enable
+Switch#configure terminal
+Switch(config)#hostname FNSWITCH
+FNSWITCH(config)#interface g0/1
+FNSWITCH(config-if)#switchport mode trunk
+FNSWITCH(config)#interface range f0/1 - 2
+FNSWITCH(config-if-range)#switchport mode access
+FNSWITCH(config-if-range)#switchport access vlan 20
+FNSWITCH(config-if-range)#exit
+FNSWITCH(config)#interface range f0/3-24, g0/2
+FNSWITCH(config-if-range)#shutdown
+FNSWITCH(config-if-range)#exit
+FNSWITCH#write memory
+
+Executive Switch (VLAN 30)
+---------------------
+Switch>enable
+Switch#configure terminal
+Switch(config)#hostname EXSWITCH
+EXSWITCH(config)#interface g0/1
+EXSWITCH(config-if)#switchport mode trunk
+EXSWITCH(config)#interface range f0/1-2
+EXSWITCH(config-if-range)#switchport mode access
+EXSWITCH(config-if-range)#switchport access vlan 30
+EXSWITCH(config-if-range)#exit
+EXSWITCH(config)#interface range f0/3-24, g0/2
+EXSWITCH(config-if-range)#shutdown
+EXSWITCH(config-if-range)#exit
+EXSWITCH#write memory
+
+IT Switch (VLAN 40)
+---------------------
+Switch>enable
+Switch#configure terminal
+Switch(config)#hostname ITSWITCH
+ITSWITCH(config)#interface g0/1
+ITSWITCH(config-if)#switchport mode trunk
+ITSWITCH(config)#interface range f0/1-2
+ITSWITCH(config-if-range)#switchport mode access
+ITSWITCH(config-if-range)#switchport access vlan 40
+ITSWITCH(config-if-range)#exit
+ITSWITCH(config)#interface range f0/3-24, g0/2
+ITSWITCH(config-if-range)#shutdown
+ITSWITCH(config-if-range)#exit
+ITSWITCH#write memory
+
+Sales Switch (VLAN 50)
+---------------------
+Switch>enable
+Switch#configure terminal
+Switch(config)#hostname SLSWITCH
+SLSWITCH(config)#interface g0/1
+SLSWITCH(config-if)#switchport mode trunk
+SLSWITCH(config)#interface range f0/1 - 2
+SLSWITCH(config-if-range)#switchport mode access
+SLSWITCH(config-if-range)#switchport access vlan 50
+SLSWITCH(config-if-range)#exit
+SLSWITCH(config)#interface range f0/3-24, g0/2
+SLSWITCH(config-if-range)#shutdown
+SLSWITCH(config-if-range)#exit
+SLSWITCH#write memory
+
+Customer Support Switch (VLAN 60)
+---------------------
+Switch>enable
+Switch#configure terminal
+Switch(config)#hostname CSSWITCH
+CSSWITCH(config)#interface g0/1
+CSSWITCH(config-if)#switchport mode trunk
+CSSWITCH(config)#interface range f0/1-2
+CSSWITCH(config-if-range)#switchport mode access
+CSSWITCH(config-if-range)#switchport access vlan 60
+CSSWITCH(config-if-range)#exit
+CSSWITCH(config)#interface range f0/3-24, g0/2
+CSSWITCH(config-if-range)#shutdown
+CSSWITCH(config-if-range)#exit
+CSSWITCH#write memory
+
+-----------------------------------------------------------------
+
+DNS Server
+---------------------
+Config ->
+	Global/Settings ->
+		Default gateway: 10.10.1.1
+		DNS Server: 10.10.1.2
+	Interface/FastEthernet0 ->
+		IPv4 Address: 10.10.1.2
+		Subnet Mask: 255.255.255.252
+Services->
+	Disable all services except the DNS service and Syslog
+	Services/DNS ->
+		* Entry(Name=www.itconsulting.com, Address=10.10.1.3)
+
+Web Server
+---------------------
+Config ->
+	Global/Settings ->
+		Default gateway: 10.10.2.1
+		DNS Server: 10.10.1.2
+	Interface/FastEthernet0 ->
+		IPv4 Address: 10.10.2.2
+		Subnet Mask: 255.255.255.248
+Services->
+	Disable all services except the HTTP/HTTPS service and Syslog
+	Services/Htttp ->
+		Edit the index.html
+
+Mail Server
+---------------------
+Config ->
+	Global/Settings ->
+		Default gateway: 10.10.2.1
+		DNS Server: 10.10.1.2
+	Interface/FastEthernet0 ->
+		IPv4 Address: 10.10.2.3
+		Subnet Mask: 255.255.255.248
+Services->
+	Disable all services except the Email service and Syslog
+	Services/Email ->
+		Add users(like cisco, cisco)
+
+FTP Server
+---------------------
+Config ->
+	Global/Settings ->
+		Default gateway: 10.10.2.1
+		DNS Server: 10.10.1.2
+	Interface/FastEthernet0 ->
+		IPv4 Address: 10.10.2.4
+		Subnet Mask: 255.255.255.248
+Services->
+	Disable all services except the FTP service and Syslog
+	Services/FTP ->
+		Add users(like cisco, cisco with all rights or however you decide)
+
+NIDS
+---------------------
+Config ->
+	Global/Settings ->
+		Default gateway: 10.10.3.1
+		DNS Server: 10.10.1.2
+	Interface/FastEthernet0 ->
+		IPv4 Address: 10.10.3.2
+		Subnet Mask: 255.255.255.252
+Services->
+	Disable all services except Syslog
+
+HoneyPot
+---------------------
+Config ->
+	Global/Settings ->
+		Default gateway: 10.10.4.1
+		DNS Server: 10.10.1.2
+	Interface/FastEthernet0 ->
+		IPv4 Address: 10.10.4.2
+		Subnet Mask: 255.255.255.252
+Services->
+	Depends on the type of honeypot
+
+-----------------------------------------------------------------
+
+HR1
+---------------------
+Config ->
+	Global/Settings ->
+		Default gateway: 192.168.1.65
+		DNS Server: 10.10.1.2
+	Interface/FastEthernet0 ->
+		IPv4 Address: 192.168.1.66
+		Subnet Mask: 255.255.255.248
+
+HR2
+---------------------
+Config ->
+	Global/Settings ->
+		Default gateway: 192.168.1.65
+		DNS Server: 10.10.1.2
+	Interface/FastEthernet0 ->
+		IPv4 Address: 192.168.1.67
+		Subnet Mask: 255.255.255.248
+
+FN1
+---------------------
+Config ->
+	Global/Settings ->
+		Default gateway: 192.168.1.1
+		DNS Server: 10.10.1.2
+	Interface/FastEthernet0 ->
+		IPv4 Address: 192.168.1.2
+		Subnet Mask: 255.255.255.240
+
+FN2
+---------------------
+Config ->
+	Global/Settings ->
+		Default gateway: 192.168.1.1
+		DNS Server: 10.10.1.2
+	Interface/FastEthernet0 ->
+		IPv4 Address: 192.168.1.3
+		Subnet Mask: 255.255.255.240
+
+EX1
+---------------------
+Config ->
+	Global/Settings ->
+		Default gateway: 192.168.1.73
+		DNS Server: 10.10.1.2
+	Interface/FastEthernet0 ->
+		IPv4 Address: 192.168.1.74
+		Subnet Mask: 255.255.255.248
+
+EX2
+---------------------
+Config ->
+	Global/Settings ->
+		Default gateway: 192.168.1.73
+		DNS Server: 10.10.1.2
+	Interface/FastEthernet0 ->
+		IPv4 Address: 192.168.75
+		Subnet Mask: 255.255.255.248
+
+IT1
+---------------------
+Config ->
+	Global/Settings ->
+		Default gateway: 192.168.1.17
+		DNS Server: 10.10.1.2
+	Interface/FastEthernet0 ->
+		IPv4 Address: 192.168.1.18
+		Subnet Mask: 255.255.255.240
+
+IT2
+---------------------
+Config ->
+	Global/Settings ->
+		Default gateway: 192.168.1.17
+		DNS Server: 10.10.1.2
+	Interface/FastEthernet0 ->
+		IPv4 Address: 192.168.1.19
+		Subnet Mask: 255.255.255.240
+
+SL1
+---------------------
+Config ->
+	Global/Settings ->
+		Default gateway: 192.168.1.33
+		DNS Server: 10.10.1.2
+	Interface/FastEthernet0 ->
+		IPv4 Address: 192.168.1.34
+		Subnet Mask: 255.255.255.240
+
+SL2
+---------------------
+Config ->
+	Global/Settings ->
+		Default gateway: 192.168.1.33
+		DNS Server: 10.10.1.2
+	Interface/FastEthernet0 ->
+		IPv4 Address: 192.168.1.35
+		Subnet Mask: 255.255.255.240
+
+CS1
+---------------------
+Config ->
+	Global/Settings ->
+		Default gateway: 192.168.1.49
+		DNS Server: 10.10.1.2
+	Interface/FastEthernet0 ->
+		IPv4 Address: 192.168.1.50
+		Subnet Mask: 255.255.255.240
+
+CS2
+---------------------
+Config ->
+	Global/Settings ->
+		Default gateway: 192.168.1.49
+		DNS Server: 10.10.1.2
+	Interface/FastEthernet0 ->
+		IPv4 Address: 192.168.1.51
+		Subnet Mask: 255.255.255.240
+
+Directory server
+---------------------
+All services off except syslog and AAA(it will be not configured but it's expected to have a radius server)
+Config ->
+	Global/Settings ->
+		Default gateway: 192.168.1.81
+		DNS Server: 10.10.1.2
+	Interface/FastEthernet0 ->
+		IPv4 Address: 192.168.1.82
+		Subnet Mask: 255.255.255.252
+
