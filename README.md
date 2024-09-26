@@ -77,7 +77,7 @@ A packet tracer project that represents a secure network topology design for a m
     <img src="images/topology.png" alt="Logo" width="100%">
   </a>
 
-The Network Topology Project for the fictional IT Consulting Business is designed to create a secure and efficient network infrastructure for a medium-small business. This setup ensures seamless communication across departments, secure data management, and efficient operation.
+The Network Topology Project for the fictitious IT Consulting Business aims to establish a secure and effective network infrastructure suitable for a small-medium size business. This setup makes communication between departments, management of information and carrying out business operations effective.
 
 ### 📊 Business Overview <a id="business-overview"></a>
 
@@ -91,11 +91,11 @@ The Network Topology Project for the fictional IT Consulting Business is designe
 
 - **Top Floor**:
   - **Executive (5 employees)**: Senior management and leadership team.
-  - **Finance (10 employees)**: Handles budgeting, accounting, and financial reporting.
+  - **Finance (10 employees)**: Handles the budget aspects, accounting, and financial reporting.
   - **HR (5 employees)**: Manages recruitment, employee relations, and benefits.
 
 - **Middle Floor**:
-  - **IT (10 employees)**: Responsible for network maintenance, technical support, and IT infrastructure.
+  - **IT (10 employees)**: Responsibles for the network maintenance, technical support, and IT infrastructure.
   - **Sales (10 employees)**: Manages client relationships, sales strategies, and business development.
 
 - **Ground Floor**:
@@ -105,11 +105,11 @@ The Network Topology Project for the fictional IT Consulting Business is designe
 
 ### ✨ Features <a id="features"></a>
 
-- **VLAN Segmentation**: Segregates traffic for better security and performance.
-- **DMZ Configuration**: Protects external-facing servers while preventing unauthorized access to internal systems.
-- **Multiple Firewalls**: Ensures layered security from external threats and internal vulnerabilities.
+- **VLAN Segmentation**: Isolates traffic to improve security, avoiding lateral movement as far as possible, and performance.
+- **DMZ Configuration**: Separates the servers, running services, from the internal network to shield them from direct exposure to the internet.
+- **Multiple Firewalls**: Provides layered protection against external attacks and internal vulnerabilities.
 - **Managed Switches**: Provides control over network traffic and improves scalability.
-- **Security Measures**: Includes NIDS, honeypot, and a web application firewall to protect against various threats.
+- **Security Measures**: Includes NIDS and a web application firewall to protect against various threats. It also has a honeypot to lure attackers and provide useful information of their pattern of attack.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -121,59 +121,60 @@ The Network Topology Project for the fictional IT Consulting Business is designe
 
 ### 🖧 Network Topology <a id="network-topology"></a>
 
-The network topology is designed with a layered security approach, ensuring that critical systems are protected from external and internal threats.
+The network topology is developed with a layered security strategy, ensuring that important systems are protected from external and internal threats.
 
 **Network Topology**:
 
 #### 1. **External Firewall**
-The external firewall serves as the first line of defense, filtering traffic between the internet and the internal network. It blocks unauthorized access and protects against various threats, including DDoS attacks and malware, ensuring a secure perimeter.
+The external firewall serves as the first line of defence, filtering traffic between the internet and the internal and DMZ networks. It blocks unauthorised access and protects against various threats and malicious IPs, ensuring a secure perimeter.
 
 #### 2. **VLAN Segmentation**
 The network is divided into several VLANs to enhance security and performance by isolating different types of traffic. This segmentation is applied both to the DMZ and the internal network:
 
 - **DMZ VLANs:**
-  - **VLAN10:** Dedicated to DNS servers.
-  - **VLAN20:** Hosts Web, Mail, and FTP servers, all protected by a Web Application Firewall (WAF).
-  - **VLAN30:** Reserved for the honeypot server, which acts as a decoy for potential attackers.
-  - **VLAN40:** Contains the Network Intrusion Detection System (NIDS) and monitoring PC for logs.
+  - **VLAN10:** Dedicated to DNS server.
+  - **VLAN20:** Web, Mail, and FTP server. The web server will be additionally protected by a Web Application Firewall (WAF).
+  - **VLAN30:** Machine running the Network Intrusion Detection System (NIDS) and monitoring the network traffic, logging the suspicious traffic.
+  - **VLAN40:** Honeypot machine, acting as a decoy to lure potential attackers, in order to learn from their attack pattern.
 
 - **Internal Network VLANs:**
   - **VLAN10:** HR Department.
   - **VLAN20:** Finance Department.
-  - **VLAN30:** IT Department.
-  - **VLAN40:** Sales Department.
-  - **VLAN50:** Monitoring PC for log analysis.
+  - **VLAN30:** Executive Department.
+  - **VLAN40:** IT Department.
+  - **VLAN50:** Sales Department.
+  - **VLAN60:** Customer support.
+  - **VLAN70:** Directory server and log centraliser for it's management.
 
-This segmentation reduces the attack surface and prevents unauthorized lateral movement within the network, limiting potential damage in the event of a compromise.
+This segmentation limits the area of attack, preventing unauthorised lateral movement as much as possible across the network, reducing the potential impact in case of a successful attack. 
 
 #### 3. **DMZ Firewall and Perimeter Network (DMZ)**
-The DMZ firewall secures the perimetrical network where servers exposed to the internet reside. Servers in the DMZ, such as the Web, Mail, and FTP servers, are isolated from the internal network to reduce the risk of a breach spreading. If these servers are compromised, the internal firewall prevents unauthorized access to the internal network, ensuring that critical systems remain protected.
+The DMZ firewall protects the perimetrical network, where servers that can be accessed via the internet remain. Servers in the DMZ (Web, Mail, and FTP server) are separated from the internal network to prevent the danger of an intrusion spreading. If the servers are compromised, the internal firewall restricts unauthorised access to the internal network, ensuring that critical infrastructure remains secure.
 
 #### 4. **Internal Firewall**
-The internal firewall provides an additional layer of security, controlling traffic between the DMZ and the internal network. This redundancy is crucial, especially if the DMZ firewall is compromised, ensuring that even with a breach, attackers would face significant obstacles before accessing sensitive internal systems.
+The internal firewall adds an additional layer of security, handling traffic between the DMZ and the internal network. This redundancy is significant, especially if the DMZ firewall gets compromised, ensuring that even with an intrusion, attackers would face considerable difficulties in getting to valuable assets in the internal computers. 
 
 #### 5. **Layer 3 Switch**
-The Layer 3 switch handles inter-VLAN routing, facilitating communication between different departments while maintaining security boundaries. Access control lists (ACLs) enforce security policies across the network, allowing for efficient operations without compromising security.
+The Layer 3 switch manages inter-VLAN routing, strengthening communication between multiple departments in addition to protection between the VLANs. Access control lists (ACLs) establish security policies throughout the network, allowing more efficient operations and improving security.
 
-<hr>
+---
 
 **Conclusion**
+This network topology design implements a deep defense plan of action, with multiple layers of protection that secure the organization's essential assets. This layout ensures that the internal network remains protected, even in the event of a server compromise, by placing servers in a permiter network (DMZ) and establishing VLAN segmentation along external and internal networks. This setup plays an important role for preserving the integrity and availability of the company's activities.
 
-This network topology design employs a defense-in-depth strategy, with multiple layers of security protecting the organization's critical systems. By placing servers in a DMZ and using VLAN segmentation alongside external and internal firewalls, the design ensures that the internal network remains secure, even in the event of a server compromise. This setup is essential for maintaining the integrity and availability of the business's operations.
-
-<hr>
+---
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ### 📁 Configuration Note <a id="config-note"></a>
 
-There is a configuration file included in the project repository named `topology.txt` that details the entire network setup. This file provides a comprehensive view of the network configuration, including specific settings for devices and interfaces.
+There is a configuration file included in the project repository titled `topology.txt` that specifies the full network setup. This file provides a complete overview of the network setup, including specific settings for devices and interfaces. 
 
 **Important Note**:
-- The Cisco Packet Tracer file included in this repository does not fully replicate the configuration outlined in `topology.txt`. This limitation is due to Packet Tracer's inability to support certain advanced features, such as dividing the interface in the Cisco Firewall ASA connected to the DMZ switch into subinterfaces.
-- The `topology.txt` file contains the complete setup, including these advanced configurations that are not represented in Packet Tracer. For a full understanding of the network configuration, please refer to this file.
+ - The Cisco Packet Tracer file included in the repository may not fully mimic the setup described in `topology.txt`, because of Packet Tracer's inability to support certain capabilities, such as dividing the interface in the Cisco Firewall ASA connected to the DMZ switch into subinterfaces, which are available in real devices.
+- The `topology.txt` file covers the whole setup, including the complex configurations that are not reflected in Packet Tracer. For a comprehensive understanding of the network settings, please refer to this file. 
 
-To access the configuration file, download it from the repository:
+To access the configuration file, get it from the repository:
 - [topology.txt](topology.txt)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
@@ -207,34 +208,34 @@ That's it! The network topology will load in Packet Tracer, and you can start ex
 <!-- SECURITY ADVICES -->
 ## 🛡️ Security <a id="security"></a>
 ### 💡 Logical Security <a id="logical-security"></a>
-- **Host Intrusion Detection System (HIDS)**: Deploy a HIDS, such as OSSEC, to monitor and analyze activities on individual hosts. It helps detect suspicious behavior, unauthorized access attempts, and potential security breaches at the host level.
-  
-- **Network Intrusion Detection System (NIDS)**: Implement a NIDS, like SNORT, to continuously monitor network traffic for malicious activities or policy violations. It provides real-time alerts on suspicious network behavior and potential attacks.
+- **Host Intrusion Detection System (HIDS)**: Use a HIDS like OSSEC to monitor and evaluate movements on each host. It will help detect unusual behaviour, unauthorised access attempts, and potential intrusions.
 
-- **Web Application Firewall (WAF)**: Use a WAF, such as Cloudflare, to protect web applications from various threats and vulnerabilities. The WAF filters and monitors HTTP requests, blocking malicious traffic and mitigating attacks such as SQL injection, cross-site scripting (XSS), and cross-site request forgery (CSRF).
+- **Network Intrusion Detection System (NIDS)**: Use a NIDS like SNORT to constantly monitor network traffic to seek malicious activity or policy breaches. It will be giving real-time alerts each time a rule is triggered.
 
-- **Honeypot**: Utilize a Honeypot, such as Dionaea, to attract and deceive attackers. This decoy system helps to gather intelligence on attack methods and tools, thereby improving overall security measures and threat detection.
+- **Web Application Firewall (WAF)**: Use a WAF like Cloudflare to defend web applications against the different threats and vulnerabilities. It will filter and monitor the multiple HTTP requests, limiting the unwanted traffic and preventing attacks such as SQL injection, cross-site scripting (XSS), and cross-site request forgery (CSRF).
 
-- **Log Management and Observability Platforms**: Use platforms like Splunk or ELK Stack to collect, analyze, and visualize log data. This helps in monitoring system activities, identifying anomalies, and generating actionable insights for security incidents.
+- **Honeypot**: Use a honeypot, like Dionaea, to draw in and fool intruders. It will act as a decoy to gather intelligence about the attack techniques and tools used by the attackers, thus improving the knowledge around pattern attacks.
 
-- **Secure Passwords**: Enforce the use of strong, complex passwords to make them resistant to brute-force attacks. Utilize tools such as the [Password Checker](https://password.kaspersky.com) to evaluate and strengthen password security.
+- **Log Management and Observability Platforms**: Use software like Splunk or ELK Stack to collect, analyse, and visualise log data. It will improve overall security by processing and representing data across multiple graphs to detect patterns and anomalous behavior.
 
-- **Awareness Program and Employee Training**: Implement an ongoing security awareness program to educate employees about security best practices and common threats. Human error is a major factor in data breaches, so training helps reduce the risk of phishing and other social engineering attacks.
+- **Secure Passwords**: Enforce the usage of robust, complicated login credentials to make them difficult against brute-force attacks. Use tools like the [Password Checker](https://password.kaspersky.com) to check password security.
 
-- **Manual Backup**: Regularly perform manual backups of critical data to ensure that important information is not lost in case of system failures or attacks. This adds an extra layer of protection against data loss.
+- **Awareness Program and Employee Training**: Establish a continuous security awareness program to educate staff about security best practices and common risks. Human error plays a big role in data breaches; therefore, training decreases the likelihood of phishing and other social engineering attacks.
+
+- **Manual Backup**: Periodically make manual backups of significant data to guarantee that crucial data is not lost in case of system failures or attacks. It adds a further degree of security against data loss.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ### 🔒 Physical Security <a id="physical-security"></a>
-- **CCTV Cameras**: Install surveillance cameras in strategic locations to monitor and record activities around sensitive areas, enhancing security and deterrence against unauthorized access.
+- **CCTV Cameras**: Make use of CCTV cameras at strategic locations so you can observe and record actions surrounding areas of concern, improving security and discouragement against illegal access.
 
-- **Biometric Access Control**: Use biometric systems, such as fingerprint or retina scanners, for restricted access to server rooms and other secure areas. This ensures that only authorized personnel can enter critical locations.
+- **Biometric Access Control**: Make use of biometric technology, such as fingerprint or retina scanners, to restrict access to server rooms as well as other sensitive places. It guarantees that only authorised workers can enter critically important sites.
 
-- **Fire Protection System**: Equip the facility with a comprehensive fire protection system, including alarms and suppression systems, to safeguard against fire hazards and protect critical infrastructure.
+- **Fire Protection System**: Make use of a complete fire protection system by incorporating alarms and suppression systems that will safeguard against fire dangers and protect essential infrastructure.
 
-- **Uninterruptible Power Supply (UPS)**: Implement UPS systems to provide backup power during outages, ensuring continuous operation of critical systems and preventing data loss or hardware damage.
-
-- **Security Guard**: Employ a security guard to provide physical security, conduct regular patrols, and respond to security incidents. Their presence enhances overall security and provides a quick response to potential threats.
+- **Uninterruptible Power Supply (UPS)**: Make use of UPS systems that supply backup power during outages, ensuring ongoing operations for important systems and preventing data loss or hardware damage.
+ 
+- **Security Guard**: Hire a security guard to provide safety for employees, carry out regular patrols, and react to security-related incidents. Their presence strengthens overall security and allows quick reaction to any attack. 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -250,7 +251,7 @@ That's it! The network topology will load in Packet Tracer, and you can start ex
 <!-- IMPROVEMENTS -->
 ## 🔧 Possible Improvements <a id="possible-improvements"></a>
 
-In the current Packet Tracer project, VPN configuration and RADIUS server setup are not yet completed. Implementing a VPN will provide secure remote access and encrypted communication, while configuring the RADIUS server will enhance centralized authentication and access control within the internal network.
+In the current Packet Tracer project, the VPN configuration and the RADIUS server setup are not yet completed. The VPN will provide secure remote access through encrypted communication. While configuring the RADIUS server will bring centralised authentication and access control within the internal network.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -261,22 +262,22 @@ Here are some additional resources that you may find useful:
 
 ### 🗃️ Documentation and Tools
 - **[Cisco Packet Tracer Documentation](https://www.netacad.com/courses/packet-tracer)**: Official documentation and tutorials for using Cisco Packet Tracer.
-- **[Cisco Official Website](https://www.cisco.com)**: Explore Cisco’s range of networking products and solutions.
-- **[Splunk](https://www.splunk.com)**: A powerful platform for searching, monitoring, and analyzing machine-generated data via a web-style interface. It’s widely used for log management and operational intelligence.
+- **[Cisco Official Website](https://www.cisco.com)**: Explore Cisco’s networking products and solutions.
+- **[Splunk](https://www.splunk.com)**: The most professional software to search, monitor, and analyse log data. Widely used for log management and operational intelligence.
 - **[ELK Stack](https://www.elastic.co/what-is/elk-stack)**: A combination of Elasticsearch, Logstash, and Kibana, used for searching, analyzing, and visualizing log data in real-time. It’s a popular choice for log management and data analysis.
-- **[Kaspersky Password Checker](https://password.kaspersky.com)**: An online tool for evaluating the strength of passwords and ensuring they are resistant to brute-force attacks.
-- **[Snort](https://www.snort.org)**: An open-source Network Intrusion Detection System (NIDS) that performs real-time traffic analysis and packet logging to detect and prevent attacks.
-- **[OSSEC](https://www.ossec.net)**: An open-source Host Intrusion Detection System (HIDS) that provides log analysis, file integrity checking, and real-time alerts.
-- **[Cloudflare](https://www.cloudflare.com)**: A web security and performance company that offers services such as a Web Application Firewall (WAF), DDoS protection, and content delivery.
-- **[Dionaea](https://github.com/DinoTools/dionaea)**: A honeypot designed to capture and analyze malware, providing insights into attack methods and tools used by attackers.
+- **[Kaspersky Password Checker](https://password.kaspersky.com)**: Online tool to evaluate the strength of passwords and see if they are resistant to brute-force attacks.
+- **[Snort](https://www.snort.org)**: Open-source Network Intrusion Detection System (NIDS) that inspects real-time traffic to detect and prevent attacks.
+- **[OSSEC](https://www.ossec.net)**: Open-source Host Intrusion Detection System (HIDS) that provides log analysis, file integrity checking, and real-time alerts.
+- **[Cloudflare](https://www.cloudflare.com)**: Web security and performance company that offers services such of Web Application Firewall (WAF), DDoS protection, and content delivery.
+- **[Dionaea](https://github.com/DinoTools/dionaea)**: Honeypot designed to capture and analyze malware, providing insights into attack methods and tools used by attackers.
 
 ### ✅ Security Best Practices
-- **[OWASP (Open Web Application Security Project)](https://owasp.org)**: Comprehensive resources on web application security.
-- **[NIST Cybersecurity Framework](https://www.nist.gov/cyberframework)**: Guidelines and best practices for improving cybersecurity.
+- **[OWASP (Open Web Application Security Project)](https://owasp.org)**: Best resource for web application security and best practices.
+- **[NIST Cybersecurity Framework](https://www.nist.gov/cyberframework)**: Guidelines and best practices to improve the overall.
 
 ### 🆘 Community and Support
-- **[Cisco Community](https://community.cisco.com)**: A forum for discussing Cisco products and networking topics.
-- **[Reddit r/networking](https://www.reddit.com/r/networking)**: A subreddit for network-related discussions and questions.
+- **[Cisco Community](https://community.cisco.com)**: Forum to discuss questions related Cisco products and networking topics.
+- **[Reddit r/networking](https://www.reddit.com/r/networking)**: Subreddit about network-related discussions and questions.
 - **[Stack Overflow](https://stackoverflow.com/questions/tagged/networking)**: Q&A site for programming and network-related queries.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
