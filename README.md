@@ -326,7 +326,7 @@ Project Link: [https://github.com/vectorete/business-network-topology](https://g
 [license-shield]: https://img.shields.io/github/license/vectorete/business-network-topology.svg?style=for-the-badge
 [license-url]: https://github.com/vectorete/business-network-topology/blob/master/LICENSE.txt
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
-[linkedin-url]: https://linkedin.com/in/vectorete
+[linkedin-url]: https://linkedin.com/in/victorkvor
 [product-project]: images/projectimg.png
 [Cisco]: https://img.shields.io/badge/Cisco-1BA0D7?style=for-the-badge&logo=cisco&logoColor=white
 [Cisco-url]: https://www.cisco.com
